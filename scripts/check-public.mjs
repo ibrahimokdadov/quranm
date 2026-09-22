@@ -13,6 +13,7 @@ export function allowedPublicPath(name) {
   if (/^web\/frontend\/(?:src|server|scripts)\/.*\.(?:ts|js|css|sh)$/.test(name)) return true;
   if (/^web\/frontend\/test\/.*\.ts$/.test(name)) return true;
   if (/^web\/frontend\/(?:package(?:-lock)?\.json|tsconfig(?:\.(?:app|node|test))?\.json|(?:vite|vitest|playwright)\.config\.ts|(?:index|hifz|recognize)\.html|tokens\.css|README\.md)$/.test(name)) return true;
+  if (/^web\/frontend\/public\/brand\/quranm-(?:(?:mark|wordmark|icon)\.(?:svg|png)|wordmark-light\.svg|icon-(?:192|512)\.png)$/.test(name)) return true;
   return /^web\/frontend\/public\/(?:audio-processor\.js|sw\.js|quran\.json|(?:icon-192|icon-512|meta-image|og-image)\.png|fonts\/[^/]+\.(?:ttf|txt)|models\/zipformer_interp_gentle_a05\.io\.json)$/.test(name);
 }
 

@@ -1,5 +1,12 @@
 # Quranm
 
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="web/frontend/public/brand/quranm-wordmark-light.svg">
+    <img src="web/frontend/public/brand/quranm-wordmark.svg" alt="Quranm — Quran and memory" width="354" height="110">
+  </picture>
+</p>
+
 **A simple place to memorize and revise the Quran, with speech recognition that runs on your device.**
 
 Choose **Memorize** or **Revise**, pick a surah and an ayah range, and begin. Quranm keeps the interface quiet while you recite: fewer controls, clear feedback, and help when you need it.

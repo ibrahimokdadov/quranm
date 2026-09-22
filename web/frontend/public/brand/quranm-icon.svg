@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Quranm app icon</title>
+<desc id="desc">An ivory open-book m on forest green.</desc>
+<rect width="512" height="512" rx="112" fill="#365d48"/><g transform="translate(64 61) scale(3.0000000)" fill="none" stroke="#f7f6f2" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M22 96V50C22 23 64 23 64 50V98M64 50C64 23 106 23 106 50V96"/>
+  <path d="M22 96C37 85 50 85 64 98C78 85 91 85 106 96"/>
+</g>
+</svg>

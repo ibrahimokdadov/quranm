@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+<title id="title">Quranm mark</title>
+<desc id="desc">The curved pages of an open Quran form an m for memory.</desc>
+<g transform="translate(0 0) scale(1.0000000)" fill="none" stroke="#365d48" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M22 96V50C22 23 64 23 64 50V98M64 50C64 23 106 23 106 50V96"/>
+  <path d="M22 96C37 85 50 85 64 98C78 85 91 85 106 96"/>
+</g>
+</svg>
