@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f6f2" />
+  <meta name="description" content="A quiet space to memorize and revise the Quran." />
+  <title>Tilawa · Memorize & revise</title>
+  <link rel="icon" href="/icon-192.png" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar fade"><button class="brand" id="home" aria-label="Home">tilawa<span>One ayah at a time.</span></button><button class="quiet" id="library-open">Your passages</button></header>
+    <main class="screen fade" id="screen"><p class="status">One moment…</p></main>
+    <section class="setup-page fade" id="setup-page" hidden aria-labelledby="setup-title">
+      <button class="quiet back" id="setup-back">← Back</button>
+      <p class="eyebrow" id="setup-mode">Memorize</p><h1 id="setup-title">Choose your ayahs.</h1>
+      <form id="setup-form">
+        <label for="surah">Surah</label><select id="surah" required></select>
+        <div class="range"><div><label for="from">From ayah</label><input id="from" type="number" min="1" required /></div><span class="range-dash" aria-hidden="true">—</span><div><label for="to">To ayah</label><input id="to" type="number" min="1" required /></div></div>
+        <p id="setup-error" class="status error" role="alert" hidden></p>
+        <button class="primary" type="submit">Continue <span aria-hidden="true">→</span></button>
+      </form>
+    </section>
+    <footer class="bottom fade"><span>A quiet moment. A lasting habit.</span><a href="/recognize.html">Recitation tracker ↗</a></footer>
+  </div>
+  <section class="live" id="live" hidden aria-label="Recitation in progress">
+    <div id="memory-meter" hidden></div>
+    <div class="orb" id="orb" aria-hidden="true"></div>
+    <p class="listening-label" id="live-label">Listening</p>
+    <p class="live-status" id="live-status" role="status"></p>
+    <p id="memory-message" class="memory-message" role="status" hidden></p>
+    <div id="live-progress" class="live-progress" role="img" aria-label="Waiting for recitation" hidden></div>
+    <div id="live-mismatch" class="live-mismatch" role="status" hidden><p id="mismatch-label"></p><span id="mismatch-reference"></span></div>
+    <div id="live-warning" class="live-warning" role="status" hidden><p id="warning-label"></p><span id="warning-reference"></span><button id="correction-help" type="button">Show the word</button></div>
+    <p id="live-review-note" class="live-review-note" hidden></p>
+    <div class="live-text quran" id="live-text" lang="ar" dir="rtl" hidden></div>
+    <div id="focused-help" class="focused-help" hidden></div>
+    <div id="cue-controls" hidden><button class="quiet" id="cue-button">Listen to this ayah</button><small class="reciter-credit">Mishary Alafasy · EveryAyah</small></div>
+    <div class="hint" id="hint" aria-live="polite"></div>
+    <div class="live-controls" id="live-controls">
+      <button class="reveal-control" id="hint-button" aria-keyshortcuts="H">One word</button>
+      <button class="finish" id="finish-button" aria-keyshortcuts="Space">Finish</button>
+      <button class="reveal-control" id="text-button" aria-keyshortcuts="R">Show text</button>
+    </div>
+  </section>
+  <dialog id="library" aria-labelledby="library-title">
+    <div class="dialog-heading"><h2 id="library-title">Your passages</h2><button class="quiet" data-close="library" aria-label="Close your passages">✕</button></div>
+    <div id="library-content"></div>
+    <button id="new-passage" class="primary">Choose a passage</button><button id="export" class="quiet">Export progress</button>
+    <p class="caption">Saved on this browser. Matched words are a practice aid; pronunciation and tajwid still need a teacher’s check.</p>
+  </dialog>
+  <script type="module" src="/src/hifz.ts"></script>
+</body>
+</html>

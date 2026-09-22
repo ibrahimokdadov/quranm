@@ -1,0 +1,42 @@
+{
+  "name": "tarteel-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json && vite build",
+    "build:server": "npx esbuild server/index.ts --bundle --platform=node --format=esm --outfile=dist-server/index.mjs --packages=external",
+    "start": "node dist-server/index.mjs",
+    "preview": "vite preview",
+    "test:correction": "tsx test/correction-audio.ts",
+    "test:hifz-audio": "tsx test/hifz-mismatch-audio.ts",
+    "test:streaming": "tsx test/stability-report.ts --repeats=1",
+    "test:streaming:matrix": "tsx test/stability-report.ts --repeats=3",
+    "test": "vitest run",
+    "test:hifz": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/amiri": "^5.2.8",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/newsreader": "^5.3.0",
+    "@hono/node-server": "^1.19.9",
+    "hono": "^4.12.3",
+    "iconify-icon": "^3.0.2",
+    "onnxruntime-web": "^1.24.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "esbuild": "^0.28.2",
+    "onnxruntime-node": "1.21.0",
+    "tsx": "^4.19.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^5.0.1"
+  },
+  "overrides": {
+    "tsx": {
+      "esbuild": "$esbuild"
+    }
+  }
+}
