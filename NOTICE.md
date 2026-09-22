@@ -2,6 +2,25 @@
 
 This repository is MIT-licensed (`LICENSE`). Some vendored models, lexicons, and scripts are **not**.
 
+## Quranm and upstream Tilawa
+
+Quranm is based on [Tilawa by yazinsai](https://github.com/yazinsai/tilawa),
+formerly offline-tarteel. Tilawa supplied the recognition core and original web
+app. Quranm adds a focused memorization and revision interface, practice progress,
+and changes to live recognition feedback. The original MIT copyright notice is
+preserved in `LICENSE`.
+
+The model-development and provenance notes below are retained from Tilawa.
+References to training, fine-tunes, historical commits, and lab paths describe
+the [upstream project](https://github.com/yazinsai/tilawa), not model training
+performed by Quranm. Some referenced lab files are not included in this public
+source distribution. Default model and corpus files are downloaded separately.
+
+Quranm's corrective audio cues use Mishary Rashid Alafasy recordings hosted by
+[EveryAyah](https://everyayah.com/). The app's MIT license does not license those
+external recordings. Bundled fonts retain their original notices, including
+[`OFL-IBM-Plex-Sans-Arabic.txt`](web/frontend/public/fonts/OFL-IBM-Plex-Sans-Arabic.txt).
+
 ## Acknowledgements
 
 - **Quran-Lab** ([`Quran-Lab/zipformer_p-arabic-v3`](https://huggingface.co/Quran-Lab/zipformer_p-arabic-v3), author Muno459 / Quran-Lab): streaming Zipformer2-CTC acoustic model, 251-token vocabulary, phoneme lexicon (`quran_text2phoneme.json`), and eval/export scripts. NPL-1.2 §6 does not require attribution; we credit them anyway. Full text: [`licenses/NPL-1.2.txt`](licenses/NPL-1.2.txt).

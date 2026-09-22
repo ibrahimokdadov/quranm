@@ -1,40 +1,52 @@
-# Tilawa web frontend
+# Quranm web app
 
-Vanilla TypeScript + Vite 7. The demo uses Zipformer2-CTC (`interp-gentle-a0.5` int8) for both Tracking and Correction.
+The Quranm practice interface builds on [Tilawa](https://github.com/yazinsai/tilawa). It uses TypeScript, Vite, ONNX Runtime Web, and the recognition core in `packages/core`. See the [project README](../../README.md) for the Memorize and Revise flows, setup, hosting, privacy, and credits.
 
-## Zipformer ( `interp-gentle-a0.5`)
+## Start development
 
-Streaming Zipformer2-CTC. The status pill shows the active engine. Model artefacts are NPL-1.2; the word-level tracker is the native MIT recitation engine, written from `lab/docs/specs/recitation-engine-spec.md` plus 23 vector oracles. It now lives in the SDK (`packages/core/src/recitation/`) and the worker here is a thin host over `ZipformerSession` from `@tilawa/core`.
+From the repository root, using Node.js 24.x (or 22.x starting at 22.12) and Bash (Git Bash on Windows):
 
-Assets are gitignored (ONNX + NPL-derived lexicon). `zipformer_interp_gentle_a05.io.json` is committed. Fetch the rest once:
-
-```bash
+```sh
+npm ci --prefix web/frontend
 bash web/frontend/scripts/fetch-zipformer-assets.sh
-# copies from a local export / the main checkout public/ tree, else downloads
-# zipformer_interp_gentle_a05.int8.onnx and zipformer_quran.json from
-# GitHub release yazinsai/tilawa v0.3.0
+npm run dev --prefix web/frontend
 ```
 
-Then from `web/frontend` (symlink `node_modules` from the main checkout if you are in a worktree):
+Open the URL printed by Vite. The practice app is available at `/` and `/hifz.html`; `/recognize.html` is the inherited recognition demo.
 
-```bash
-npm run dev
-# open http://localhost:5173/
+The asset script downloads the default model and phoneme corpus from Tilawa's `v0.3.0` release. Both remain ignored by Git. It can also reuse existing local assets. The default model is approximately 66 MB and is cached in the browser's IndexedDB after loading. See [NOTICE.md](../../NOTICE.md) for the separate model license.
+
+## Tests and builds
+
+From `web/frontend`:
+
+```sh
+npm test
+npm run build
+npm run build:server
 ```
 
-Node smoke (onnxruntime-node, no browser):
+`npm test` runs frontend and server unit tests. `npm run build` checks TypeScript and creates the client bundle. `npm run build:server` bundles the production server; `npm start` serves the result on port 5000 (or `PORT`).
 
-```bash
-cd web/frontend
-npx tsx test/zipformer-node-smoke.ts
+Browser UI tests:
+
+```sh
+npm run test:hifz
 ```
 
-Streaming stability:
+The Playwright configuration uses an installed **Google Chrome** and starts its own dev server on port **5174**, with desktop and mobile viewports. Set `TILAWA_TEST_PORT` if that port is occupied. The ordinary UI tests use a simulated microphone and mocked recognition; they do not measure recognition accuracy.
 
-```bash
-npx tsx test/stability-report.ts --repeats=3 --json=test/track-c-v1-stability.json
-npx tsx test/stability-report.ts --repeats=3 --corpus=test_corpus_v2 --json=test/track-c-v2-stability.json
-npx tsx test/stability-report.ts --repeats=1 --corpus=test_corpus_v3 --json=test/track-c-v3-stability.json
-```
+The separate `*audio.spec.ts` tests require downloaded model assets and an appropriate WAV recording via `TILAWA_TEST_AUDIO`, plus the scenario flag described at the top of each test file. They are skipped by default. Recordings, traces, and screenshots are local artifacts and must not be committed. The upstream lab's benchmark recordings are not included in this public repository.
 
-int8 ONNX sha256 `eaf099af…` (66 MB). Threads stay off (`numThreads=1`, EP `wasm`). First load is ~66 MB into IndexedDB under `zipformer-interp-gentle-a05-int8`.
+## Implementation map
+
+- `src/hifz.ts`: page rendering and session orchestration.
+- `src/hifz/memorization.ts`: visible reading and hidden recall steps.
+- `src/hifz/recitation-monitor.ts`: expected-passage and different-ayah feedback.
+- `src/hifz/progress.ts`: local attempts and review scheduling.
+- `src/hifz/listener.ts`: browser microphone and worker integration.
+- `server/app.ts`: static serving, response headers, and the health endpoint.
+
+Vite resolves `@tilawa/core` directly to this repository's source. The core has its own dependency installation and test suite; the app does not require a published npm package or a remote recognition service.
+
+Keep microphone data on the device and distinguish uncertain recognition from a confirmed mismatch. The [practice evidence notes](../../docs/simple-practice-evidence.md) explain why visible reading, assisted recall, and independent recall are tracked separately.

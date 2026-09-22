@@ -1,241 +1,139 @@
-# Tilawa
+# Quranm
 
-> Formerly called offline-tarteel.
+**A simple place to memorize and revise the Quran, with speech recognition that runs on your device.**
 
-This fork adds a minimal **Memorize / Revise** Quran practice app to
-[yazinsai/tilawa](https://github.com/yazinsai/tilawa). The original copyright and
-license notices are preserved. The SDK documentation below describes the upstream
-recognition engine; this fork is not an official upstream deployment.
+Choose **Memorize** or **Revise**, pick a surah and an ayah range, and begin. Quranm keeps the interface quiet while you recite: fewer controls, clear feedback, and help when you need it.
 
-## Run the practice app
+Quranm is based on **[Tilawa by yazinsai](https://github.com/yazinsai/tilawa)**, formerly called offline-tarteel. Tilawa provides the Quran recognition engine and the foundation of the web app. This project builds a focused memorization and revision experience on that work. It is an independent derivative, not an official Tilawa release.
 
-Use Node.js 22 or newer. From the repository root:
+## Two ways to practise
+
+### Memorize
+
+Learn a selected passage one ayah at a time:
+
+1. Read the ayah aloud with the text visible. Each matched reading advances the progress indicator.
+2. After two matched readings, the upcoming text is hidden so you can recite from memory.
+3. Continue through the selected ayahs, then return for another recall of each one.
+4. If you selected several ayahs, finish by reciting the connected passage from memory.
+
+The app advances between rounds automatically. If a pass does not match, it gives you another opportunity to read and try again. Revealing text or receiving a hint counts as assisted practice; it does not count as independent recall.
+
+### Revise
+
+Recite a passage you already know while the app follows along:
+
+- Matched words appear as you recite, with live progress through the ayah.
+- Detected mistakes or a different ayah produce an inline red indication.
+- A corrective audio cue can play the expected ayah after you pause. Listening resumes automatically afterward.
+- Repeated difficulty brings up larger text with a small red label to help you retry.
+
+Saved passages and suggested review dates live in **Your passages**, so you can come back for later practice.
+
+## How the practice is designed
+
+The flow combines short study units, recall without looking, feedback, and later review. These choices are informed by research on retrieval practice and spaced learning. The particular repetition counts are product defaults, not a scientifically validated Quran memorization formula. See the [learning evidence and design notes](docs/simple-practice-evidence.md) for the studies and their limits.
+
+Recognition is a practice aid. A match means the system followed the passage; it does not certify every pronunciation or tajwid detail. Feedback can be delayed or mistaken, especially with unclear audio or similar passages. A qualified teacher remains important for checking recitation.
+
+## Run locally
+
+Use **Node.js 24.x** (or 22.x starting at 22.12), npm, Git, and a browser with microphone access. The asset download script uses Bash and curl; on Windows, run the commands below in **Git Bash**.
 
 ```sh
-cd web/frontend
-npm ci
-cd ../..
+git clone https://github.com/ibrahimokdadov/quranm.git
+cd quranm
+
+npm ci --prefix web/frontend
 bash web/frontend/scripts/fetch-zipformer-assets.sh
-cd web/frontend
-npm run dev
+npm run dev --prefix web/frontend
 ```
 
-Open the localhost URL printed by Vite. Windows users can run the asset script
-in Git Bash. For a production build, run `npm run build`, `npm run build:server`,
-then `npm start` from `web/frontend` (port 5000, or set `PORT`). Microphones need
-HTTPS when hosted outside localhost.
+Open the URL printed by Vite, usually `http://localhost:5173`, and allow microphone access when you start a session. No account, API key, or external inference server is required.
 
-Recognition runs on the device. There are no accounts, analytics, recording
-uploads, or admin dashboard. Audio hints are downloaded from EveryAyah; that
-service receives ordinary request metadata and the requested ayah. Progress
-stays in browser storage. See [PRIVACY.md](PRIVACY.md).
+The setup script downloads the default recognition model (about 66 MB) and phoneme corpus from Tilawa's release assets. Model loading may take a little time on the first session; the browser caches it for later use. These downloaded assets are excluded from Git and have a [separate license](#license).
 
-Code is MIT; the default model and phoneme corpus have a separate non-commercial
-license and are downloaded during setup. See [NOTICE.md](NOTICE.md). Model weights,
-benchmark recordings, private deployment history, and local reports are not part
-of the public source export. Publishing instructions: [docs/public-release.md](docs/public-release.md).
+## Build and host
 
-Offline Quran recognition. Give it 16 kHz mono audio, get back `surah:ayah`. Fully on-device — web, mobile, or node, no network at inference time.
+After completing the setup above, run these commands from the repository root:
 
-`@tilawa/core` is pure TypeScript with **zero native dependencies**. You inject the ONNX runtime.
-
-**Licence split:** package code is MIT. The Zipformer model and phoneme corpus are **NPL-1.2** (non-commercial, share-alike). FastConformer assets are MIT / NVIDIA CC-BY-4.0. Details: [NOTICE.md](https://github.com/yazinsai/tilawa/blob/main/NOTICE.md).
-
-Two engines ship in the box. The default is **Zipformer** — streaming Zipformer2-CTC over a 251-token tajweed-phoneme vocabulary. **FastConformer** (text CTC) is still there under its original API.
-
-## Install
-
-```bash
-npm i @tilawa/core
-# plus the onnxruntime for your platform (you own this dep):
-npm i onnxruntime-web            # browser / WASM
-npm i onnxruntime-node           # node
-npm i onnxruntime-react-native   # React Native
+```sh
+npm run build --prefix web/frontend
+npm run build:server --prefix web/frontend
+npm start --prefix web/frontend
 ```
 
-Default-engine assets from [release v0.3.0](https://github.com/yazinsai/tilawa/releases/tag/v0.3.0):
+The production server listens on port **5000**, or the port set by `PORT`. It serves the built app and an `/api/health` endpoint. Use **HTTPS** outside localhost so the browser can access the microphone. Keep the server's cross-origin isolation headers when deploying behind a reverse proxy.
 
-```bash
-base=https://github.com/yazinsai/tilawa/releases/download/v0.3.0
-curl -L -O "$base/zipformer_interp_gentle_a05.int8.onnx"  # 66 MB
-curl -L -O "$base/zipformer_quran.json"                    # 5.5 MB, NPL-1.2
-# optional — Arabic text on verse_match events
-curl -L -O https://github.com/yazinsai/tilawa/releases/download/v0.2.0/quran.json
+You can also serve `web/frontend/dist` with a static host that supports these response headers:
+
+```text
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Referrer-Policy: no-referrer
+X-Content-Type-Options: nosniff
 ```
 
-The model's I/O manifest is bundled (`DEFAULT_ZIPFORMER_IO`). `quran.json` is display text only; matching works without it.
+The model assets must be present before building so Vite can include them in `dist`.
 
-## Browser
+## Privacy
 
-```ts
-import * as ort from "onnxruntime-web";
-// `onnxruntime-web/wasm` works too
-import { createRecognitionSession } from "@tilawa/core";
+- Microphone audio is processed locally in the browser. The app does not upload recordings or transcripts.
+- Progress and preferences stay in that browser's local storage; model files are cached in IndexedDB. There is no account sync.
+- The app has no analytics, recording storage API, or admin dashboard.
+- Audio hints are fetched from **EveryAyah**. That service receives the requested ayah and normal connection metadata, but no microphone audio.
+- Initial asset downloads and audio hints need a network connection. Recognition itself runs locally once the required assets are loaded.
 
-// Vite copies `*.wasm` into the bundle by default. A raw <script type=module>
-// or a bundler that doesn't should set:
-// ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.24.2/dist/";
+See [PRIVACY.md](PRIVACY.md) for storage, hosting, and optional debug/export details, and [SECURITY.md](SECURITY.md) for reporting guidance.
 
-const session = await createRecognitionSession({
-  ort,
-  model: () => fetch("/zipformer_interp_gentle_a05.int8.onnx").then((r) => r.arrayBuffer()),
-  corpus: () => fetch("/zipformer_quran.json").then((r) => r.json()),
-  quran: () => fetch("/quran.json").then((r) => r.json()), // optional
-  onEvent: (msg) => {
-    if (msg.type === "verse_match") console.log(`${msg.surah}:${msg.ayah}`, msg.verse_text);
-  },
-});
+## Development
 
-for await (const chunk of micChunks) await session.feed(chunk);
-const final = await session.stop();
-session.reset();
+The interface uses TypeScript and Vite. Recognition runs in a browser worker using ONNX Runtime Web and Tilawa's Zipformer engine. The small production server uses Hono.
+
+| Location | Purpose |
+| --- | --- |
+| [`web/frontend/src/hifz.ts`](web/frontend/src/hifz.ts) | Practice interface and session flow |
+| [`web/frontend/src/hifz/`](web/frontend/src/hifz/) | Memorization, revision feedback, audio hints, and saved progress |
+| [`packages/core/`](packages/core/) | Tilawa recognition core, with this project's tracking changes |
+| [`web/frontend/server/`](web/frontend/server/) | Production asset server |
+| [`docs/`](docs/) | Practice design, evidence, and publication notes |
+| [`scripts/`](scripts/) | Public-source checks and export tools |
+
+Run the frontend unit tests from the repository root:
+
+```sh
+npm test --prefix web/frontend
 ```
 
-Passing `ort` + `model` picks the provider automatically: `["wasm"]` under onnxruntime-web, `["cpu"]` under onnxruntime-node. Override with `executionProviders`. On web we also set `ort.env.wasm.numThreads = 1` unless you already set it — pthread init hangs in workers without COOP/COEP; single-thread is what the demo ships.
+Install the core's separate dependencies before running its tests:
 
-`createZipformerSession(opts)` is the same thing without the engine switch, and returns the richer `ZipformerSession` (`transcript`, `verses`, `engineState`, …).
-
-## Node
-
-```ts
-import { readFile } from "node:fs/promises";
-import * as ort from "onnxruntime-node";
-import { createRecognitionSession } from "@tilawa/core";
-
-const session = await createRecognitionSession({
-  ort,
-  model: () => readFile("zipformer_interp_gentle_a05.int8.onnx"),
-  corpus: async () => JSON.parse(await readFile("zipformer_quran.json", "utf8")),
-  quran: async () => JSON.parse(await readFile("quran.json", "utf8")),
-  onEvent: (msg) => {
-    if (msg.type === "verse_match") console.log(`${msg.surah}:${msg.ayah}`);
-    if (msg.type === "raw_transcript") console.log(msg.text);
-  },
-});
-
-const CHUNK = Math.round(0.3 * 16000); // 300 ms
-for (let i = 0; i < pcm16k.length; i += CHUNK) {
-  await session.feed(pcm16k.subarray(i, i + CHUNK));
-}
-const final = await session.stop();
-session.reset();
+```sh
+npm ci --prefix packages/core
+npm test --prefix packages/core
 ```
 
-## React Native
+Fetch the model assets first as shown in setup. Some optional core checks require additional audio fixtures or Python dependencies. Browser UI checks use `npm run test:hifz --prefix web/frontend` and expect Google Chrome; tests needing separate recitation recordings are skipped unless their audio fixtures are configured. See the [frontend development guide](web/frontend/README.md).
 
-RN can't hand the model to ORT as an `ArrayBuffer` — bundle the `.onnx` as an asset, copy it to the documents dir, create the session from the **path**, and pass that session in with the runtime's `Tensor`:
+For the original SDK's API and integration examples, see the [upstream Tilawa documentation](https://github.com/yazinsai/tilawa#readme). Installing the upstream `@tilawa/core` npm package does not install the Quranm practice app; this app uses the core source in this repository.
 
-```ts
-import * as ort from "onnxruntime-react-native";
-import { createZipformerSession } from "@tilawa/core";
+## Contributing
 
-const session = await createZipformerSession({
-  session: await ort.InferenceSession.create(modelPath),
-  Tensor: ort.Tensor,
-  corpus: () => loadJsonAsset("zipformer_quran.json"),
-  quran: () => loadJsonAsset("quran.json"),
-});
-```
+Bug reports, accessibility improvements, recognition fixes, and documentation contributions are welcome. [Open an issue](https://github.com/ibrahimokdadov/quranm/issues) with the practice mode, selected ayah range, browser, expected behavior, and what happened. Keep private recordings, progress exports, credentials, and unredacted logs out of public issues and commits.
 
-Walkthrough: [examples/react-native.md](https://github.com/yazinsai/tilawa/blob/main/packages/core/examples/react-native.md). Copy-paste runners: [examples/](https://github.com/yazinsai/tilawa/tree/main/packages/core/examples).
+For code changes, run the relevant tests and frontend build. Keep the practice flow simple, distinguish recognition uncertainty from a detected mistake, and preserve upstream attribution. `node scripts/check-public.mjs .` checks the public source selection; [SECURITY.md](SECURITY.md) describes separate secret scanning.
 
-## Alternate engine: FastConformer
+## Credits
 
-Pick it for one-shot `transcribe()`, a raw Arabic transcript, or MIT-only assets. Download from [release v0.2.0](https://github.com/yazinsai/tilawa/releases/tag/v0.2.0):
+- **[Tilawa / yazinsai](https://github.com/yazinsai/tilawa)** — the upstream project, recognition SDK, and original web app on which Quranm is based.
+- **[Quran-Lab](https://huggingface.co/Quran-Lab/zipformer_p-arabic-v3)** — the Zipformer model and phoneme resources underlying the default recognizer.
+- **[alketab](https://prompter.alketab.app/)** — a design and phoneme-corpus source acknowledged by Tilawa. The inherited provenance is documented in [NOTICE.md](NOTICE.md).
+- **[ONNX Runtime](https://onnxruntime.ai/)** — local model inference.
+- **[EveryAyah](https://everyayah.com/)** and reciter **Mishary Rashid Alafasy** — the verse recordings used for audio hints.
 
-```bash
-base=https://github.com/yazinsai/tilawa/releases/download/v0.2.0
-curl -L -O "$base/fastconformer_full_mixed.onnx"
-curl -L -O "$base/vocab.json"
-curl -L -O "$base/quran_ctc_tokens.json"
-```
+Quranm adds the two practice paths, guided repetition and hidden recall, saved review scheduling, and improvements to live feedback and retry handling. Credit for the underlying engine and model work belongs to the upstream projects above.
 
-Write a `SessionRunner` that owns `ort`, then hand it to `createTilawaSession` with `{ vocab, quranCtcTokens, quran }`. Missing keys throw `Error("fastconformer engine requires assets: vocab, ctcTokens, quran ...")` before anything is read.
+## License
 
-```ts
-import * as ort from "onnxruntime-web";
-import { createTilawaSession, type SessionRunner } from "@tilawa/core";
+The application code is available under the [MIT License](LICENSE), with the original Tilawa copyright notice preserved.
 
-async function createWebSessionRunner(modelBuffer: ArrayBuffer): Promise<SessionRunner> {
-  const session = await ort.InferenceSession.create(modelBuffer, {
-    executionProviders: ["wasm"],
-  });
-  return {
-    async run(audio) {
-      const input = new ort.Tensor("float32", audio, [1, audio.length]);
-      const length = new ort.Tensor("int64", BigInt64Array.from([BigInt(audio.length)]), [1]);
-      const results = await session.run({ audio_signal: input, length });
-      const output = results[session.outputNames[0]];
-      const [, timeSteps, vocabSize] = output.dims as number[];
-      return { logprobs: output.data as Float32Array, timeSteps, vocabSize };
-    },
-  };
-}
-
-const session = createTilawaSession(await createWebSessionRunner(modelBuffer), {
-  vocab,
-  quranCtcTokens,
-  quran,
-});
-const pred = await session.transcribe(audioFloat32);
-// { surah: 1, ayah: 1, ayah_end: 3, score: 0.92, transcript: "..." }
-```
-
-Same runner shape on node (`onnxruntime-node`) and RN (create from a file path). FastConformer has no `stop()` — it finalizes on trailing silence. Wrap it in `createRecognitionSession({ engine: "fastconformer", runner, assets })` for the uniform `feed()` / `stop()` / `reset()` surface.
-
-## Verse events
-
-Both engines emit the same `WorkerOutbound` union — via `onEvent` / `onOutput`, and as the return value of `feed()` / `stop()`:
-
-| `msg.type` | Meaning | Key fields |
-|---|---|---|
-| `verse_match` | Confident match for the current verse | `surah`, `ayah`, `verse_text`, `surah_name`, `confidence`, `surrounding_verses` |
-| `verse_candidate` | Ranked candidates before lock-in | `candidates[]`, `stable`, `final_flush` |
-| `word_progress` | Word-level alignment within a verse | `surah`, `ayah`, `word_index`, `total_words`, `matched_indices` |
-| `raw_transcript` | Accumulated transcript so far (and again on `stop()`) | `text`, `confidence` |
-| `final_sequence` | Full ordered sequence when recitation ends | `verses[]`, `confidence` |
-
-## API
-
-### `createRecognitionSession(options)`
-
-`engine` defaults to `"zipformer"` (`DEFAULT_ENGINE`). Pass `engine: "fastconformer"` with `{ runner, assets }`. Returns `feed()`, `stop()` / `flush()`, `reset()`, plus `zipformer` / `fastconformer` (the other is `null`).
-
-### `createZipformerSession(options)` → `ZipformerSession`
-
-- `{ ort, model }` — runtime namespace + model bytes (or a loader). Providers: `["wasm"]` under onnxruntime-web, `["cpu"]` under onnxruntime-node.
-- `{ session, Tensor }` — an `InferenceSession` you created plus that runtime's `Tensor`. RN shape.
-
-| Option | Default | Purpose |
-|---|---|---|
-| `corpus` | *required* | Parsed `zipformer_quran.json`, or a loader |
-| `quran` | empty | Arabic text for `verse_match` |
-| `io` | `DEFAULT_ZIPFORMER_IO` | Override only for your own export |
-| `executionProviders` | auto | See above |
-| `onEvent` | — | Verse events, same order `feed()` / `stop()` return them |
-| `minWordFraction` | `0.5` | Fraction of an ayah's words that must land |
-| `enableFallback` | `true` | Whole-ayah search when nothing locked |
-| `tailSeconds` | `2.0` | Silence `stop()` appends to flush the CTC tail |
-
-Also: `transcript`, `tallies` / `verses`, `engineState`, `config`.
-
-### `createTilawaSession(runner, assets, options?)` → `TilawaSession`
-
-`assets`: `{ vocab, quranCtcTokens, quran, blankId? }`. `transcribe()` / `transcribeRaw()` / `feed()` / `reset()` / `setConfig()` / `getConfig()`. Streaming presets: `"conservative"` / `"balanced"` / `"aggressiveAdvance"`.
-
-`audio` on `SessionRunner.run` is **borrowed, not owned** — treat it as read-only.
-
-## Models
-
-| | Zipformer (default) | FastConformer |
-|---|---|---|
-| **File** | `zipformer_interp_gentle_a05.int8.onnx` (66 MB) | `fastconformer_full_mixed.onnx` (88 MB) |
-| **Input** | 16 kHz mono `Float32Array`, streamed | same, preprocessing in-graph |
-| **Recall / Precision / SeqAcc** | 100% / 100% / 100% on v1 (53/53) and v2 (43/43) | 100% / 100% / 100% on v1 (53/53) |
-| **Licence** | **NPL-1.2** non-commercial share-alike | NVIDIA [CC-BY-4.0](https://huggingface.co/nvidia/stt_ar_fastconformer_hybrid_large_pcd_v1.0) |
-
-## This repository
-
-Live demo: [web/frontend](https://github.com/yazinsai/tilawa/tree/main/web/frontend) (Zipformer only). Bake-off writeups: [lab/EXPERIMENTS.md](https://github.com/yazinsai/tilawa/blob/main/lab/EXPERIMENTS.md).
-
-Zipformer models, vocabulary, and the phoneme corpus derive from [Quran-Lab/zipformer_p-arabic-v3](https://huggingface.co/Quran-Lab/zipformer_p-arabic-v3) and alketab's [ملقّن القرآن](https://prompter.alketab.app/). They are **NPL-1.2** and are not covered by this repo's MIT licence. [NOTICE.md](https://github.com/yazinsai/tilawa/blob/main/NOTICE.md).
+**The default model and phoneme corpus are separately licensed under [NPL-1.2](licenses/NPL-1.2.txt), with non-commercial and share-alike terms.** They are not covered by the code's MIT license. External audio recordings and bundled fonts also retain their own terms. See [NOTICE.md](NOTICE.md) for the full attribution and licensing details.
