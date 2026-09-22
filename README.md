@@ -9,6 +9,8 @@
 
 **A simple place to memorize and revise the Quran, with speech recognition that runs on your device.**
 
+[Open Quranm](https://quranm.whhite.com/)
+
 Choose **Memorize** or **Revise**, pick a surah and an ayah range, and begin. Quranm keeps the interface quiet while you recite: fewer controls, clear feedback, and help when you need it.
 
 Quranm is based on **[Tilawa by yazinsai](https://github.com/yazinsai/tilawa)**, formerly called offline-tarteel. Tilawa provides the Quran recognition engine and the foundation of the web app. This project builds a focused memorization and revision experience on that work. It is an independent derivative, not an official Tilawa release.
@@ -82,6 +84,17 @@ X-Content-Type-Options: nosniff
 ```
 
 The model assets must be present before building so Vite can include them in `dist`.
+
+### Docker and Dokku
+
+The Dockerfile downloads the recognition assets, builds the app, and runs the production server as a non-root user:
+
+```sh
+docker build -t quranm .
+docker run --rm -p 5000:5000 quranm
+```
+
+For Dokku, create an app, assign your domain, and deploy this repository using the Dockerfile builder. Map HTTP traffic to container port 5000 and configure HTTPS before using the microphone. The included `app.json` checks `/api/health` before accepting a deployment. No database, private recordings, or API credentials are needed.
 
 ## Privacy
 

@@ -111,7 +111,7 @@ function render(): void {
   $('screen').hidden = view === 'picker';
   if (view === 'picker') return;
   if (view === 'paths') {
-    $('screen').innerHTML = `<div class="welcome-mark" aria-hidden="true">${book}</div><p class="eyebrow">A little, every day</p><h1>Your time with the Quran.</h1>
+    $('screen').innerHTML = `<div class="welcome-mark" aria-hidden="true"><img src="/brand/quranm-mark.svg" alt="" width="88" height="88" /></div><p class="eyebrow">Quran + memory</p><h1>Your time with the Quran.</h1>
       <p class="intro">What would you like to do today?</p><div class="path-choices">
       <button class="path-card" data-action="memorize"><span class="path-icon">${book}</span><span><strong>Memorize</strong><small>Read. Repeat. Remember.</small></span><span class="path-arrow" aria-hidden="true">↗</span></button>
       <button class="path-card" data-action="revise"><span class="path-icon">${mic}</span><span><strong>Revise</strong><small>Recite. We’ll follow along.</small></span><span class="path-arrow" aria-hidden="true">↗</span></button></div>

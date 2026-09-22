@@ -199,7 +199,7 @@ function refreshLabels(): void {
   refreshMode();
   $demoTitle.textContent = microphonePending ? tr("Microphone permission", "إذن الميكروفون") : state.isActive
     ? (state.hasFirstMatch ? tr("Verse found", "تمّ التعرّف على الآية") : tr("Listening", "نستمع لتلاوتك"))
-    : tr("Try Tilawa", "جرّب تلاوة");
+    : tr("Recitation tracker", "متابعة التلاوة");
   $modelStatus.textContent = state.modelReady ? tr("Offline ready", "جاهز دون إنترنت")
     : setupFailed ? tr("Download interrupted", "انقطع التنزيل")
     : modelInitStarted ? (downloadPercent >= 100 ? tr("Preparing model…", "جارٍ تجهيز النموذج…") : `${downloadPercent}%`)

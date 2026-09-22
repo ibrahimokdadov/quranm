@@ -1,10 +1,10 @@
 :root {
- --color-paper: #FFFFFF; --color-ink: #171717; --color-muted: #626262;
- --color-rule: #DEDEDE; --color-surface: #F6F6F4; --color-selected: #ECEDE8;
+ --color-paper: #f7f6f2; --color-ink: #263b32; --color-muted: #657064;
+ --color-rule: #dedfd7; --color-surface: #eff1e9; --color-selected: #dce4d5;
  --color-paper-2: var(--color-surface); --color-ink-2: var(--color-muted);
- --color-rule-2: #767676; --color-focus: #171717; --color-error: #a32121;
+ --color-rule-2: #757c73; --color-focus: #365d48; --color-error: #a33d35;
  --color-success: #28643d; --color-scrim: #0006;
- --font-body: system-ui, sans-serif; --font-display: var(--font-body);
+ --font-body: 'IBM Plex Sans', system-ui, sans-serif; --font-display: 'Newsreader', Georgia, serif;
  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px;
  --space-md: 16px; --space-lg: 24px; --space-xl: 40px;
  --text-sm: 14px; --text-lg: 24px; --control-height: 44px;

@@ -1,17 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f7f6f2" />
-  <meta name="description" content="A quiet space to memorize and revise the Quran." />
-  <title>Tilawa · Memorize & revise</title>
-  <link rel="icon" href="/icon-192.png" />
-</head>
+    <title>Quranm · Memorize & revise</title>
+    <meta name="application-name" content="Quranm" />
+    <meta name="description" content="A quiet space to memorize and revise the Quran, with speech recognition on your device." />
+    <meta name="theme-color" content="#f7f6f2" />
+    <link rel="canonical" href="https://quranm.whhite.com/" />
+    <link rel="icon" type="image/svg+xml" href="/brand/quranm-icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/brand/quranm-icon-192.png" />
+    <link rel="apple-touch-icon" href="/brand/quranm-icon-192.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Quranm" />
+    <meta property="og:title" content="Quranm · Memorize & revise" />
+    <meta property="og:description" content="A quiet space to memorize and revise the Quran, with speech recognition on your device." />
+    <meta property="og:url" content="https://quranm.whhite.com/" />
+    <meta property="og:image" content="https://quranm.whhite.com/brand/quranm-social.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Quranm — Quran and memory" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Quranm · Memorize & revise" />
+    <meta name="twitter:description" content="A quiet space to memorize and revise the Quran, with speech recognition on your device." />
+    <meta name="twitter:image" content="https://quranm.whhite.com/brand/quranm-social.png" />
+    <meta name="twitter:image:alt" content="Quranm — Quran and memory" />
+  </head>
 <body>
   <div class="shell">
-    <header class="topbar fade"><button class="brand" id="home" aria-label="Home">tilawa<span>One ayah at a time.</span></button><button class="quiet" id="library-open">Your passages</button></header>
+    <header class="topbar fade"><button class="brand" id="home" aria-label="Home"><img src="/brand/quranm-wordmark.svg" alt="Quranm" width="184" height="57" /></button><button class="quiet" id="library-open">Your passages</button></header>
     <main class="screen fade" id="screen"><p class="status">One moment…</p></main>
     <section class="setup-page fade" id="setup-page" hidden aria-labelledby="setup-title">
       <button class="quiet back" id="setup-back">← Back</button>
@@ -23,7 +42,7 @@
         <button class="primary" type="submit">Continue <span aria-hidden="true">→</span></button>
       </form>
     </section>
-    <footer class="bottom fade"><span>A quiet moment. A lasting habit.</span><a href="/recognize.html">Recitation tracker ↗</a></footer>
+    <footer class="bottom fade"><span>A little, every day.</span><a href="https://github.com/yazinsai/tilawa" target="_blank" rel="noopener">Based on Tilawa</a><a href="/recognize.html">Recitation tracker ↗</a></footer>
   </div>
   <section class="live" id="live" hidden aria-label="Recitation in progress">
     <div id="memory-meter" hidden></div>

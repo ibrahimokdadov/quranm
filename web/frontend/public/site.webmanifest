@@ -1,0 +1,25 @@
+{
+  "id": "/",
+  "name": "Quranm \u2014 Quran + memory",
+  "short_name": "Quranm",
+  "description": "A quiet space to memorize and revise the Quran.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#f7f6f2",
+  "icons": [
+    {
+      "src": "/brand/quranm-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/quranm-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

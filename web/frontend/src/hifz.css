@@ -16,8 +16,8 @@ button, a, input, select { outline-offset: 5px; }
 a { color: inherit; text-underline-offset: 4px; }
 .shell { min-height: 100svh; display: flex; flex-direction: column; max-width: 1280px; margin: auto; padding: 0 52px; }
 .topbar { height: 104px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.brand { font-weight: 500; font-size: 23px; letter-spacing: -.06em; text-decoration: none; background: none; padding: 8px 0; }
-.brand span { font-weight: 400; font-size: 12px; letter-spacing: .04em; margin-left: 13px; color: var(--muted); }
+.brand { display: inline-flex; align-items: center; flex-shrink: 0; min-height: 44px; text-decoration: none; background: none; padding: 0; }
+.brand img { display: block; width: 184px; height: auto; }
 .quiet { background: transparent; padding: 10px 12px; min-height: 44px; color: var(--muted); border-radius: 8px; }
 .quiet:hover { color: var(--ink); background: #eaece4; }
 .screen { flex: 1; display: grid; align-content: center; justify-items: center; padding: 30px 0 64px; text-align: center; width: 100%; max-width: 740px; margin: auto; }
@@ -27,8 +27,8 @@ h1, h2 { font: 400 42px/1.15 'Newsreader', Georgia, serif; margin: 0; letter-spa
 .passage-button svg { width: 17px; color: var(--muted); }
 .reference { color: var(--muted); font-size: 13px; margin: 9px 0 0; }
 .intro { margin: 14px 0 36px; color: var(--muted); font-size: 14px; }
-.welcome-mark { width: 68px; height: 68px; border: 1px solid #dce2d5; border-radius: 50%; display: grid; place-items: center; margin-bottom: 30px; background: #edf0e7; color: #5c7553; }
-.welcome-mark svg { width: 28px; height: 28px; stroke-width: 1.1; }
+.welcome-mark { width: 88px; height: 88px; display: grid; place-items: center; margin-bottom: 24px; }
+.welcome-mark img { display: block; width: 88px; height: 88px; }
 .path-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; max-width: 600px; }
 .path-card { display: flex; align-items: center; gap: 18px; text-align: left; padding: 27px 24px; border: 1px solid var(--line); border-radius: 18px; background: #fbfaf7; transition: border-color .2s, transform .2s, background .2s; }
 .path-card:hover { border-color: #9aac92; background: #eff2e9; transform: translateY(-2px); }
@@ -78,7 +78,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .secondary:hover { border-color: #9ba991; }
 .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 .caption { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
-.bottom { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 28px; font-size: 11px; color: var(--muted); gap: 20px; }
+.bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 16px 0 28px; font-size: 11px; color: var(--muted); gap: 12px 20px; }
 .bottom a { text-decoration: none; }
 .status { font-size: 13px; color: var(--muted); max-width: 470px; margin: 15px auto; }
 .error { color: #8e4c33; }
@@ -146,14 +146,14 @@ details ul { padding-left: 20px; }
 @media (max-width: 600px) {
   .path-choices { grid-template-columns: 1fr; max-width: 340px; gap: 12px; }
   .path-card { padding: 21px 22px; }
-  .brand span { display: none; }
+  .brand img { width: 142px; }
   .welcome-mark { margin-bottom: 23px; }
   .setup-page { padding-bottom: 35px; }
   #memory-meter { top: 0; left: 20px; }
-  .shell { padding: 0 24px; } .topbar { height: 80px; }
+  .shell { padding: 0 24px; } .topbar { height: 80px; gap: 12px; }
   .screen { padding-top: 28px; padding-bottom: 35px; }
   h1 { font-size: 35px; } .quran { margin: 30px 0; line-height: 2.1; }
-  .bottom { padding-bottom: 20px; } .brand span { margin-left: 9px; }
+  .bottom { padding-bottom: 20px; }
   .live-controls { gap: 8px; } .live-controls button { font-size: 12px; padding: 10px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 export function allowedPublicPath(name) {
-  if (/^(?:\.gitignore|\.dockerignore|README\.md|LICENSE|NOTICE\.md|PRIVACY\.md|SECURITY\.md)$/.test(name)) return true;
+  if (/^(?:\.gitignore|\.dockerignore|Dockerfile|app\.json|README\.md|LICENSE|NOTICE\.md|PRIVACY\.md|SECURITY\.md)$/.test(name)) return true;
   if (/^(?:scripts\/[^/]+\.mjs|licenses\/[^/]+\.txt)$/.test(name)) return true;
   if (/^docs\/(?:hifz-practice|live-correction|simple-practice-evidence|public-release)\.md$/.test(name)) return true;
   if (/^lab\/docs\/specs\/vectors\/[^/]+\.json$/.test(name)) return true;
@@ -13,7 +13,8 @@ export function allowedPublicPath(name) {
   if (/^web\/frontend\/(?:src|server|scripts)\/.*\.(?:ts|js|css|sh)$/.test(name)) return true;
   if (/^web\/frontend\/test\/.*\.ts$/.test(name)) return true;
   if (/^web\/frontend\/(?:package(?:-lock)?\.json|tsconfig(?:\.(?:app|node|test))?\.json|(?:vite|vitest|playwright)\.config\.ts|(?:index|hifz|recognize)\.html|tokens\.css|README\.md)$/.test(name)) return true;
-  if (/^web\/frontend\/public\/brand\/quranm-(?:(?:mark|wordmark|icon)\.(?:svg|png)|wordmark-light\.svg|icon-(?:192|512)\.png)$/.test(name)) return true;
+  if (/^web\/frontend\/public\/brand\/quranm-(?:(?:mark|wordmark|icon)\.(?:svg|png)|wordmark-light\.svg|icon-(?:192|512)\.png|social\.png)$/.test(name)) return true;
+  if (name === 'web/frontend/public/site.webmanifest') return true;
   return /^web\/frontend\/public\/(?:audio-processor\.js|sw\.js|quran\.json|(?:icon-192|icon-512|meta-image|og-image)\.png|fonts\/[^/]+\.(?:ttf|txt)|models\/zipformer_interp_gentle_a05\.io\.json)$/.test(name);
 }
 
